@@ -2001,63 +2001,64 @@ section,
 }
 
 /*--------------------------------------------------------------
-# How We Work Section (updated for 5 items)
+# How We Work Section (slider version — keeps same card sizes)
 --------------------------------------------------------------*/
-.how-we-work .steps-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 2rem;
+.how-we-work {
+  /* optional wrapper styles */
+  --steps-gap: 2rem;
+  --card-min-width: 280px; /* tetap seperti sebelumnya */
+  --card-padding-vertical: 2.5rem;
+  --card-padding-horizontal: 2rem;
+}
+
+.how-we-work .container { position: relative; }
+
+/* wrapper yang menyembunyikan overflow */
+.how-we-work .steps-wrapper {
+  overflow: hidden;
   position: relative;
   margin-bottom: 3rem;
 }
 
-/* Desktop: tampilkan 5 kolom */
-@media (min-width: 1200px) {
-  .how-we-work .steps-grid {
-    grid-template-columns: repeat(5, 1fr);
-  }
+/* track flex yang bergerak untuk slider */
+.how-we-work .steps-track {
+  display: flex;
+  gap: var(--steps-gap);
+  transition: transform 0.45s cubic-bezier(.22,.9,.35,1);
+  will-change: transform;
+  padding-bottom: 0.5rem; /* beri ruang untuk dots */
 }
 
-/* Untuk layar besar namun kurang dari 1200 (opsional fallback) */
-@media (min-width: 992px) and (max-width: 1199.98px) {
-  .how-we-work .steps-grid {
-    grid-template-columns: repeat(4, 1fr);
-  }
-}
-
-@media (max-width: 768px) {
-  .how-we-work .steps-grid {
-    gap: 1.5rem;
-  }
-}
-
+/* setiap card tetap mempertahankan styling dan ukuran general */
 .how-we-work .step-card {
+  flex: 0 0 var(--card-min-width); /* lebar tetap minimal seperti semula */
   background: var(--surface-color);
-  padding: 2.5rem 2rem;
+  padding: var(--card-padding-vertical) var(--card-padding-horizontal);
   border-radius: 20px;
   text-align: center;
   position: relative;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
   transition: all 0.3s ease;
   border: 1px solid color-mix(in srgb, var(--accent-color), transparent 90%);
+  box-sizing: border-box;
 }
 
+/* hover tetap sama */
 .how-we-work .step-card:hover {
   transform: translateY(-10px);
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
   border-color: var(--accent-color);
 }
-
 .how-we-work .step-card:hover .step-icon {
   background-color: var(--accent-color);
   color: var(--contrast-color);
   transform: scale(1.1);
 }
-
 .how-we-work .step-card:hover .step-arrow {
   transform: translateX(5px);
 }
 
+/* icon, number, heading, paragraph — biarkan sama seperti desain awal */
 .how-we-work .step-card .step-icon {
   width: 80px;
   height: 80px;
@@ -2071,7 +2072,6 @@ section,
   margin: 0 auto 1.5rem;
   transition: all 0.3s ease;
 }
-
 .how-we-work .step-card .step-number {
   background: linear-gradient(135deg, var(--accent-color) 0%, color-mix(in srgb, var(--accent-color), #000 20%) 100%);
   color: var(--contrast-color);
@@ -2084,20 +2084,15 @@ section,
   display: inline-block;
   margin-bottom: 1rem;
 }
-
 .how-we-work .step-card h3 {
   font-size: 1.4rem;
   font-weight: 700;
   margin-bottom: 1rem;
   color: var(--heading-color);
 }
-
 @media (max-width: 576px) {
-  .how-we-work .step-card h3 {
-    font-size: 1.2rem;
-  }
+  .how-we-work .step-card h3 { font-size: 1.2rem; }
 }
-
 .how-we-work .step-card p {
   font-size: 0.95rem;
   color: var(--default-color);
@@ -2105,11 +2100,11 @@ section,
   margin-bottom: 0;
 }
 
-/* Panah antar card */
+/* panah di dalam card (tetap disembunyikan di mobile sesuai aturan lama) */
 .how-we-work .step-card .step-arrow {
   position: absolute;
   top: 50%;
-  right: -15px; /* posisinya keluar sedikit ke kanan */
+  right: -15px;
   width: 30px;
   height: 30px;
   background-color: var(--accent-color);
@@ -2122,34 +2117,70 @@ section,
   transition: all 0.3s ease;
   z-index: 2;
 }
-
-/* sembunyikan panah di layar kecil */
 @media (max-width: 991px) {
-  .how-we-work .step-card .step-arrow {
-    display: none;
-  }
+  .how-we-work .step-card .step-arrow { display: none; }
+}
+.how-we-work .step-card:last-child .step-arrow { display: none; }
+
+/* NAV (prev/next) tombol di sisi */
+.how-we-work .steps-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 5;
+  display: flex;
+  gap: 0.5rem;
+}
+.how-we-work .steps-nav .btn {
+  background: var(--surface-color);
+  border: 1px solid color-mix(in srgb, var(--accent-color), transparent 85%);
+  width: 42px;
+  height: 42px;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+}
+.how-we-work .steps-nav .btn[disabled] {
+  opacity: 0.45;
+  cursor: default;
 }
 
-/* sembunyikan panah pada card terakhir (agar tidak muncul setelah item terakhir) */
-.how-we-work .step-card:last-child .step-arrow {
-  display: none;
+/* posisi prev/next kiri & kanan */
+.how-we-work .steps-nav.prev { left: 0.25rem; }
+.how-we-work .steps-nav.next { right: 0.25rem; }
+
+/* dots indicator di bawah */
+.how-we-work .steps-dots {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-top: 1rem;
+}
+.how-we-work .steps-dots button {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: none;
+  background: color-mix(in srgb, var(--accent-color), transparent 75%);
+  cursor: pointer;
+  padding: 0;
+}
+.how-we-work .steps-dots button.active {
+  background: var(--accent-color);
 }
 
-/* fallback tablet: 2 kolom */
+/* responsive adjustments */
 @media (max-width: 991px) {
-  .how-we-work .steps-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
+  .how-we-work .steps-nav { display: none; }
+  .how-we-work { --steps-gap: 1.5rem; }
+  .how-we-work .step-card { padding: 2rem 1.5rem; }
 }
-
 @media (max-width: 576px) {
-  .how-we-work .steps-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .how-we-work .step-card {
-    padding: 2rem 1.5rem;
-  }
+  .how-we-work .steps-track { gap: 1rem; }
+  .how-we-work .step-card { flex: 0 0 90%; } /* mobile: card hampir penuh */
 }
 
 /*--------------------------------------------------------------
