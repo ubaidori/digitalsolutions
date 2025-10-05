@@ -1242,6 +1242,11 @@ section,
   padding: 40px 15px;
 }
 
+.hero-content {
+  text-align: center; /* set menengahkan hero-badge */
+  margin-bottom: 20px;
+}
+
 .hero .hero-badge {
   display: inline-block;
   padding: 8px 20px;
