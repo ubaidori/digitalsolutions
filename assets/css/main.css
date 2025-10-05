@@ -1242,7 +1242,7 @@ section,
   padding: 40px 15px;
 }
 
-.hero-content {
+.hero-content2 {
   text-align: center; /* set menengahkan hero-badge */
   margin-bottom: 20px;
 }
@@ -2001,7 +2001,7 @@ section,
 }
 
 /*--------------------------------------------------------------
-# How We Work Section
+# How We Work Section (updated for 5 items)
 --------------------------------------------------------------*/
 .how-we-work .steps-grid {
   display: grid;
@@ -2011,7 +2011,15 @@ section,
   margin-bottom: 3rem;
 }
 
-@media (min-width: 992px) {
+/* Desktop: tampilkan 5 kolom */
+@media (min-width: 1200px) {
+  .how-we-work .steps-grid {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+
+/* Untuk layar besar namun kurang dari 1200 (opsional fallback) */
+@media (min-width: 992px) and (max-width: 1199.98px) {
   .how-we-work .steps-grid {
     grid-template-columns: repeat(4, 1fr);
   }
@@ -2097,10 +2105,11 @@ section,
   margin-bottom: 0;
 }
 
+/* Panah antar card */
 .how-we-work .step-card .step-arrow {
   position: absolute;
   top: 50%;
-  right: -15px;
+  right: -15px; /* posisinya keluar sedikit ke kanan */
   width: 30px;
   height: 30px;
   background-color: var(--accent-color);
@@ -2114,16 +2123,19 @@ section,
   z-index: 2;
 }
 
+/* sembunyikan panah di layar kecil */
 @media (max-width: 991px) {
   .how-we-work .step-card .step-arrow {
     display: none;
   }
 }
 
+/* sembunyikan panah pada card terakhir (agar tidak muncul setelah item terakhir) */
 .how-we-work .step-card:last-child .step-arrow {
   display: none;
 }
 
+/* fallback tablet: 2 kolom */
 @media (max-width: 991px) {
   .how-we-work .steps-grid {
     grid-template-columns: repeat(2, 1fr);
@@ -3650,7 +3662,7 @@ section,
   opacity: 1;
 }
 
-/*--------------------------------------------------------------
+  /*--------------------------------------------------------------
 # Team Section
 --------------------------------------------------------------*/
 .team .swiper-wrapper {
